@@ -1,12 +1,27 @@
 # Sync Magento stock status to Algolia
 
-This script keeps the `in_stock` value in Algolia aligned with Magento's
-MSI-aware product stock status.
+This repository includes a custom script that keeps Algolia's `in_stock` value
+aligned with Magento's MSI-aware product stock status.
 
-It asks Magento GraphQL for every product's `id` and `stock_status`, then
-partially updates the matching Algolia record. Magento product IDs are used as
-Algolia `objectID` values, so the script only needs to send the two fields
-below:
+## Where the script lives
+
+The custom script is here:
+
+[`src/app/code/Algolia/CustomAlgolia/scripts/sync-stock-status-to-algolia.php`](src/app/code/Algolia/CustomAlgolia/scripts/sync-stock-status-to-algolia.php)
+
+The file is part of the `Algolia_CustomAlgolia` module. On the host, it lives
+under `src/`; inside this project's PHP container, `src/` is Magento's
+application root, so the same file is available at:
+
+```text
+app/code/Algolia/CustomAlgolia/scripts/sync-stock-status-to-algolia.php
+```
+
+## What it does
+
+The script asks Magento GraphQL for every product's `id` and `stock_status`,
+then partially updates the matching Algolia record. Magento product IDs are
+used as Algolia `objectID` values, so the script sends only these fields:
 
 ```json
 {
@@ -21,8 +36,7 @@ not already have a matching Algolia record, that update is ignored.
 ## Stores and MSI
 
 The store views to process live in the `MAGENTO_STORE_CODES` list at the top
-of [`sync-stock-status-to-algolia.php`](sync-stock-status-to-algolia.php). At
-the moment, the script runs for:
+of the script. At the moment, it runs for:
 
 - `default`
 - `north_palm_beach`
@@ -71,7 +85,7 @@ export ALGOLIA_BATCH_SIZE=1000    # Algolia records per batch request
 
 ## Running it
 
-From the Magento application root, check what the script would send first:
+From Magento's application root, check what the script would send first:
 
 ```sh
 php app/code/Algolia/CustomAlgolia/scripts/sync-stock-status-to-algolia.php --dry-run
