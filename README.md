@@ -1,11 +1,13 @@
 ## About
 
 This repository includes a script that updates the `in_stock` value 
-independently of Algolia's standard indexing job.
+independently of Algolia's Magento integration's indexing job. \
 
-This script queries Magento GraphQL for every product's `id` and `stock_status`,
-then partially updates the matching Algolia record `stock_status` attribute.
-Magento product IDs are used as Algolia `objectID` values, so only these fields are sent within the partialUpdate():
+Algolia's Magento integration's indexing job uses SQL to assemble each product's complete data, which is derived from several tables (catalog, store, price, category, URL, inventory tables, etc.). \
+
+Instead, this script queries Magento GraphQL directly for each product's `id` and `stock_status`, and then partially updates the matching Algolia record `stock_status` attribute via partialUpdate(). By avoiding the aforementioned indexing job, the speed of updating each product's `stock_status` in Algolia is noticabley increased, especially for large catelogs with numerous Magento websites / store views.
+
+Magento product IDs are used as Algolia `objectID` values, so only these fields are sent within partialUpdate():
 
 ```json
 {
@@ -13,8 +15,6 @@ Magento product IDs are used as Algolia `objectID` values, so only these fields 
   "in_stock": true
 }
 ```
-
-Crucially, this bypasses the need for a SQL query that traverses the entire Magentro framework for `stock_status`. In theory, this greatly increases the indexing performance for implmentations with numerous Magento websites / store views.
 
 ## Key Assumptions
 The following assumptions are made about the Magento environment that the script will run in:
