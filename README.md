@@ -1,4 +1,4 @@
-# Sync Magento stock status to Algolia
+# About
 
 This repository includes a script that updates the `in_stock` value 
 independently of Algolia's standard indexing job.
@@ -16,7 +16,7 @@ Magento product IDs are used as Algolia `objectID` values, so only these fields 
 
 Crucially, this bypasses the need for a SQL query that traverses the entire Magentro framework for `stock_status`. In theory, this greatly increases the indexing performance for implmentations with numerous Magento websites / store views.
 
-## Key Assumptions:
+## Key Assumptions
 The following assumptions are made about the Magento environment that the script will run in:
 - Each store location is a Magento Website.
 - Each Website has one Store and one Store View.
@@ -25,8 +25,7 @@ The following assumptions are made about the Magento environment that the script
 - By default Algolia creates one primary product index per Store View, producing location-named indexes such as magento2_prod_north_palm_beach_products.
 
 ## Running the script
-
-The custom script is located here:
+The script is located here:
 
 [`src/app/code/Algolia/CustomAlgolia/scripts/sync-stock-status-to-algolia.php`](src/app/code/Algolia/CustomAlgolia/scripts/sync-stock-status-to-algolia.php)
 
